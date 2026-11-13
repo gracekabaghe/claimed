@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Subscription Active — Claimed{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="auth-container" style="text-align: center;">
+        <div class="auth-card">
+            <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+            <h2>Subscription active!</h2>
+            <p style="margin-bottom: 8px;">You're now on the <strong>{{ plan_name }}</strong> plan.</p>
+            <p class="dash-hint" style="margin-bottom: 24px;">Subscription ID: {{ subscription_id[:20] }}…</p>
+            <a href="/dashboard" class="button button-primary">Go to dashboard</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

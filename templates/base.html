@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Claimed — Get Your Business on ChatGPT{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="brand">
+                <span class="brand-mark">C</span>
+                <span class="brand-text">Claimed</span>
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/#how-it-works" class="nav-link">How it works</a>
+                <a href="/#pricing" class="nav-link">Pricing</a>
+            </div>
+            {% if session.get("user_id") %}
+            <div class="nav-user">
+                <a href="/dashboard" class="nav-link">{{ session.get("email", "Account") }}</a>
+                <a href="/logout" class="button button-secondary button-sm">Sign out</a>
+            </div>
+            {% else %}
+            <div class="nav-auth">
+                <a href="/login" class="nav-link">Sign in</a>
+                <a href="/signup" class="button button-primary button-sm">Sign up</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    <main>{% block content %}{% endblock %}</main>
+    <footer class="footer">
+        <div class="footer-inner">
+            <p class="footer-text">&copy; 2026 Claimed &middot; <a href="https://x.com/agenticgrace" class="footer-link">@agenticgrace</a> &middot; <a href="https://getclaimed.net" class="footer-link">getclaimed.net</a></p>
+        </div>
+    </footer>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Claimed — Dashboard{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="section-inner" style="max-width: 900px;">
+        <div class="dash-header">
+            <h2>Dashboard</h2>
+            <p class="dash-email">{{ email }}</p>
+        </div>
+
+        <div class="dash-grid">
+            <div class="dash-card dash-card-action">
+                <h3 class="dash-card-title">AI Profile Optimizer</h3>
+                <p>Generate your ChatGPT Business Profile with AI — description, category, keywords, and Business Agent prompt.</p>
+                <a href="/optimizer" class="button button-primary">Open optimizer</a>
+            </div>
+            <div class="dash-card">
+                <h3 class="dash-card-title">Profile status</h3>
+                <div class="dash-stat">
+                    <span class="dash-stat-num">0</span>
+                    <span class="dash-stat-label">claimed businesses</span>
+                </div>
+                <p class="dash-hint">Run a scan and follow the wizard to claim your first business.</p>
+            </div>
+            <div class="dash-card">
+                <h3 class="dash-card-title">ChatGPT visibility</h3>
+                <div class="dash-stat"><span class="dash-stat-num">—</span><span class="dash-stat-label">mentions tracked</span></div>
+                <p class="dash-hint">Coming soon: real ChatGPT mention tracking.</p>
+            </div>
+            <div class="dash-card">
+                <h3 class="dash-card-title">Competitor watch</h3>
+                <div class="dash-stat"><span class="dash-stat-num">—</span><span class="dash-stat-label">competitors tracked</span></div>
+                <p class="dash-hint">Coming soon: see who's claimed in your market.</p>
+            </div>
+        </div>
+
+        <!-- Upgrade -->
+        <div class="upsell-card" style="margin-top: var(--space-xl);" id="upgrade">
+            <div class="upsell-badge">Upgrade</div>
+            <h3>Unlock Pro features</h3>
+            <p>AI profile optimizer, visibility tracking, competitor intelligence, and change alerts.</p>
+            <div class="upgrade-buttons">
+                <button class="button button-primary" onclick="subscribe('pro_monthly')" id="btnPro">
+                    Pro — $29/month
+                </button>
+                <button class="button button-secondary" onclick="subscribe('agency_monthly')" id="btnAgency">
+                    Agency — $199/month
+                </button>
+            </div>
+            <p class="dash-hint" style="margin-top: 12px;">Secure payment via PayPal. Cancel anytime.</p>
+        </div>
+    </div>
+</section>
+
+<script>
+let paypalLoaded = false;
+
+async function subscribe(plan) {
+    const btn = plan === 'pro_monthly' ? document.getElementById('btnPro') : document.getElementById('btnAgency');
+    btn.disabled = true;
+    btn.textContent = 'Creating subscription…';
+
+    try {
+        const res = await fetch('/api/paypal/create-subscription', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({plan})
+        });
+        const data = await res.json();
+        if (data.approval_url) {
+            window.location.href = data.approval_url;
+        } else {
+            alert('Could not create subscription. Please try again.');
+            btn.disabled = false;
+            btn.textContent = plan === 'pro_monthly' ? 'Pro — $29/month' : 'Agency — $199/month';
+        }
+    } catch (err) {
+        alert('Payment setup failed. Please check your connection.');
+        btn.disabled = false;
+        btn.textContent = plan === 'pro_monthly' ? 'Pro — $29/month' : 'Agency — $199/month';
+    }
+}
+</script>
+{% endblock %}

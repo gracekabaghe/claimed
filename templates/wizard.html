@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Claimed — Verification Wizard: {{ domain }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="section-inner" style="max-width: 720px;">
+        <a href="/" class="back-link">← Back to scanner</a>
+
+        <div class="wizard-header">
+            <div class="wizard-badge">
+                {{ method | capitalize }} verification path
+            </div>
+            <h2>Claim <span class="text-indigo">{{ domain }}</span> on ChatGPT</h2>
+            <p class="section-sub">Follow these steps in order. Each step links to the exact page in ChatGPT Business Hub.</p>
+        </div>
+
+        <div class="wizard-steps">
+            {% for step in steps %}
+            <div class="wizard-step" id="step-{{ step.num }}">
+                <div class="wizard-step-marker">
+                    <div class="wizard-step-num">{{ step.num }}</div>
+                    {% if not loop.last %}
+                    <div class="wizard-step-line"></div>
+                    {% endif %}
+                </div>
+                <div class="wizard-step-body">
+                    <h3 class="wizard-step-title">{{ step.title }}</h3>
+                    <p class="wizard-step-detail">{{ step.detail }}</p>
+                    <div class="wizard-step-tip">
+                        <span class="tip-icon">💡</span>
+                        <span>{{ step.tip }}</span>
+                    </div>
+                    <div class="wizard-step-actions">
+                        <label class="wizard-checkbox">
+                            <input type="checkbox" class="step-checkbox" data-step="{{ step.num }}">
+                            <span>Mark as done</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="wizard-footer">
+            <div class="wizard-progress" id="progressBar">
+                <div class="wizard-progress-label">0 of {{ steps | length }} steps complete</div>
+                <div class="wizard-progress-track">
+                    <div class="wizard-progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <a href="/dashboard" class="button button-primary" id="finishBtn" style="display:none;">
+                Go to dashboard
+            </a>
+        </div>
+
+        <!-- Upsell card -->
+        <div class="upsell-card">
+            <div class="upsell-badge">Pro feature</div>
+            <h3>Let AI write your ChatGPT profile</h3>
+            <p>Our optimizer analyzes successful profiles and generates a description, categories, and product information tuned for ChatGPT's ranking signals. Save hours of guesswork.</p>
+            <a href="/dashboard" class="button button-primary">Upgrade to Pro — $29/mo</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Progress tracking
+const checkboxes = document.querySelectorAll('.step-checkbox');
+const progressLabel = document.querySelector('.wizard-progress-label');
+const progressFill = document.getElementById('progressFill');
+const finishBtn = document.getElementById('finishBtn');
+const total = checkboxes.length;
+
+// Load saved state
+const saved = JSON.parse(localStorage.getItem('wizard_progress') || '{}');
+
+checkboxes.forEach(cb => {
+    const step = cb.dataset.step;
+    if (saved[step]) cb.checked = true;
+    cb.addEventListener('change', () => {
+        saved[step] = cb.checked;
+        localStorage.setItem('wizard_progress', JSON.stringify(saved));
+        updateProgress();
+    });
+});
+
+function updateProgress() {
+    const done = document.querySelectorAll('.step-checkbox:checked').length;
+    progressLabel.textContent = `${done} of ${total} steps complete`;
+    progressFill.style.width = `${(done / total) * 100}%`;
+    finishBtn.style.display = done === total ? 'inline-flex' : 'none';
+
+    // Update step markers
+    document.querySelectorAll('.wizard-step').forEach((step, i) => {
+        if (i < done) {
+            step.classList.add('step-done');
+        } else {
+            step.classList.remove('step-done');
+        }
+    });
+}
+
+updateProgress();
+</script>
+{% endblock %}

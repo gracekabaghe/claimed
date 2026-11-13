@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}AI Profile Optimizer — Claimed{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="section-inner" style="max-width: 800px;">
+        <a href="/dashboard" class="back-link">← Dashboard</a>
+        <div class="section-head">
+            <div class="wizard-badge">Pro feature</div>
+            <h2>AI Profile Optimizer</h2>
+            <p class="section-sub">Generate an optimized ChatGPT Business Profile — description, category, services, keywords, and Business Agent prompt — all tuned for ChatGPT's ranking signals.</p>
+        </div>
+
+        {% if not is_pro %}
+        <!-- Free user upsell -->
+        <div class="upsell-card">
+            <div class="upsell-badge">Pro required</div>
+            <h3>Upgrade to Pro to use the AI Optimizer</h3>
+            <p>Generate professional ChatGPT Business Profile content in seconds. Save hours of writing and guesswork. Your profile content is what ChatGPT uses to recommend your business.</p>
+            <a href="/dashboard#upgrade" class="button button-primary">Upgrade — $29/month</a>
+        </div>
+        {% else %}
+        <!-- Pro user: the tool -->
+        <div class="optimizer-card">
+            <form id="optimizerForm">
+                <div class="form-group">
+                    <label for="bizName" class="form-label">Business name</label>
+                    <input type="text" id="bizName" class="form-input" placeholder="Oak Street Dental" required>
+                </div>
+                <div class="form-group">
+                    <label for="bizDesc" class="form-label">What does your business do? (optional but helps)</label>
+                    <textarea id="bizDesc" class="form-input form-textarea" rows="3" placeholder="Family-owned dental practice in Austin, TX. General and cosmetic dentistry since 2012. Accepts most insurance."></textarea>
+                </div>
+                <button type="submit" class="button button-primary" id="generateBtn">
+                    Generate profile
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow">
+                        <path d="M5 2l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="optimizer-loading" id="loading" style="display:none;">
+                <div class="loading-spinner"></div>
+                <p>Crafting your optimized profile…</p>
+            </div>
+
+            <div class="optimizer-error" id="error" style="display:none;"></div>
+
+            <div class="optimizer-results" id="results" style="display:none;">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if is_pro %}
+<script>
+const form = document.getElementById('optimizerForm');
+const loading = document.getElementById('loading');
+const errorEl = document.getElementById('error');
+const results = document.getElementById('results');
+const btn = document.getElementById('generateBtn');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('bizName').value.trim();
+    const desc = document.getElementById('bizDesc').value.trim();
+    if (!name) return;
+
+    loading.style.display = 'block';
+    errorEl.style.display = 'none';
+    results.style.display = 'none';
+    btn.disabled = true;
+    btn.innerHTML = 'Generating…';
+
+    try {
+        const res = await fetch('/api/optimize-profile', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({business_name: name, business_description: desc})
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        renderResults(data);
+    } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+    } finally {
+        loading.style.display = 'none';
+        btn.disabled = false;
+        btn.innerHTML = 'Generate profile <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow"><path d="M5 2l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+});
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // brief flash
+    });
+}
+
+function renderResults(d) {
+    const safe = (s) => (s || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    results.innerHTML = `
+        <div class="opt-section">
+            <div class="opt-section-head">
+                <h3>📝 Profile Description</h3>
+                <button class="button button-secondary button-sm" onclick="copyText(this)">Copy</button>
+            </div>
+            <textarea class="opt-edit" id="editDesc" rows="4">${safe(d.profile_description)}</textarea>
+            <p class="opt-edit-hint">Edit any incorrect details above, then click Copy.</p>
+        </div>
+
+        <div class="opt-section">
+            <div class="opt-section-head">
+                <h3>🏷 Category</h3>
+            </div>
+            <input type="text" class="form-input" id="editCategory" value="${safe(d.category)}">
+            <p class="opt-edit-hint">Pick the best match from ChatGPT's Business Hub categories.</p>
+        </div>
+
+        <div class="opt-section">
+            <div class="opt-section-head">
+                <h3>🛠 Services & Products</h3>
+            </div>
+            <ul class="opt-list">
+                ${(d.services || []).map(s => `<li>${safe(s)}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="opt-section">
+            <div class="opt-section-head">
+                <h3>🔑 Search Keywords</h3>
+            </div>
+            <div class="opt-tags">
+                ${(d.keywords || []).map(k => `<span class="opt-tag">${safe(k)}</span>`).join('')}
+            </div>
+        </div>
+
+        <div class="opt-section">
+            <div class="opt-section-head">
+                <h3>🤖 Business Agent Prompt</h3>
+                <button class="button button-secondary button-sm" onclick="copyText(this)">Copy</button>
+            </div>
+            <textarea class="opt-edit opt-edit-mono" id="editAgent" rows="6">${safe(d.business_agent_prompt)}</textarea>
+        </div>
+
+        <div class="opt-section">
+            <div class="opt-section-head">
+                <h3>💡 Profile Tips</h3>
+            </div>
+            <ul class="opt-list">
+                ${(d.profile_tips || []).map(t => `<li>${safe(t)}</li>`).join('')}
+            </ul>
+        </div>
+
+        <div class="opt-copy-all">
+            <button class="button button-primary" onclick="copyAll()">Copy all to clipboard</button>
+        </div>
+    `;
+    results.style.display = 'block';
+    results.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+
+function copyText(btn) {
+    const section = btn.closest('.opt-section');
+    const textarea = section ? section.querySelector('textarea, input') : null;
+    const text = textarea ? textarea.value : '';
+    navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1500);
+}
+
+function copyAll() {
+    const desc = document.getElementById('editDesc')?.value || '';
+    const agent = document.getElementById('editAgent')?.value || '';
+    const full = `Profile Description:\n${desc}\n\nBusiness Agent Prompt:\n${agent}`;
+    navigator.clipboard.writeText(full);
+}
+</script>
+{% endif %}
+{% endblock %}
