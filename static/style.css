@@ -155,37 +155,11 @@ p { max-width: 65ch; }
 
 .button-arrow { flex-shrink: 0; }
 
-/* --- Hero --- */
-.hero {
-  padding: var(--space-3xl) var(--space-md) var(--space-2xl);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-}
-.hero-inner { max-width: 720px; margin: 0 auto; text-align: center; }
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: var(--text-sm); font-weight: 500; color: var(--color-amber);
-  background: var(--color-amber-light);
-  padding: 6px 16px; border-radius: var(--radius-pill);
-  margin-bottom: var(--space-md);
-}
-.badge-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--color-amber);
-  animation: pulse-dot 2s infinite;
-}
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.hero-heading {
-  margin-bottom: var(--space-md);
-}
-.hero-sub {
-  font-size: var(--text-lg); color: var(--color-text-secondary);
-  margin: 0 auto var(--space-lg); max-width: 560px; line-height: 1.65;
-}
+/* Remove old hero badge — editorial kicker replaces it */
+.hero-badge { display: none; }
+.hero-heading { display: none; }
+.hero-sub { display: none; }
+.hero { padding: 0; }
 
 /* --- Readiness Checker --- */
 .checker {

@@ -1,6 +1,6 @@
 ---
 name: Claimed
-description: A trustworthy, premium SaaS tool for business owners. Professional indigo with warm accents. Clean, high-contrast, approachable — the visual opposite of AI slop.
+description: Editorial/magazine visual world. Trusted publication aesthetic applied to a SaaS tool — headlines carry weight, typography leads, the product serves the story.
 
 colors:
   # Primary brand
