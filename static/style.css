@@ -591,6 +591,7 @@ p { max-width: 65ch; }
 /* --- Footer link --- */
 .footer-link { color: var(--color-indigo); text-decoration: none; }
 .footer-link:hover { text-decoration: underline; }
+.footer-paypal { color: var(--color-text-muted); font-weight: 600; }
 
 /* --- Disclosure --- */
 .checker-disclosure {
