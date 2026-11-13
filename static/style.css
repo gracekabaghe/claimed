@@ -432,6 +432,7 @@ p { max-width: 65ch; }
   line-height: 1.5;
 }
 .tip-icon { flex-shrink: 0; }
+.wizard-step-link { display: inline-flex; margin-top: 4px; }
 
 .wizard-step-actions { padding-top: 4px; }
 .wizard-checkbox {

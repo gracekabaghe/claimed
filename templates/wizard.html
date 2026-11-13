@@ -30,6 +30,9 @@
                         <span class="tip-icon">💡</span>
                         <span>{{ step.tip }}</span>
                     </div>
+                    {% if step.get("link") %}
+                    <a href="{{ step.link }}" target="_blank" rel="noopener" class="button button-secondary button-sm wizard-step-link">{{ step.link_text }}</a>
+                    {% endif %}
                     <div class="wizard-step-actions">
                         <label class="wizard-checkbox">
                             <input type="checkbox" class="step-checkbox" data-step="{{ step.num }}">

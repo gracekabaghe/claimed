@@ -73,6 +73,8 @@ WIZARD_STEPS = {
             "title": "Connect your Shopify store",
             "detail": "Open ChatGPT, go to Business Hub in the sidebar, and select 'Connect with Shopify'. Your store will be verified instantly because Shopify and OpenAI share an integration.",
             "tip": "Make sure you're logged into the same Shopify admin account that owns the store.",
+            "link": "https://chatgpt.com",
+            "link_text": "Open ChatGPT →",
         },
         {
             "num": 2,
@@ -105,6 +107,8 @@ WIZARD_STEPS = {
             "title": "Sign in to ChatGPT Business Hub",
             "detail": "Go to chatgpt.com, open the sidebar, and click Business Hub. Search for your business by name.",
             "tip": "Use a personal ChatGPT account — you don't need ChatGPT Enterprise or an Ads account.",
+            "link": "https://chatgpt.com",
+            "link_text": "Open ChatGPT →",
         },
         {
             "num": 2,
@@ -137,6 +141,8 @@ WIZARD_STEPS = {
             "title": "Check if your business is listed",
             "detail": "Sign in to ChatGPT, open Business Hub, and search for your business. US local businesses (stores, restaurants, services) may already have a listing from publicly available data.",
             "tip": "If you can't find your business, you may need to wait — OpenAI is expanding eligibility over time.",
+            "link": "https://chatgpt.com",
+            "link_text": "Open ChatGPT →",
         },
         {
             "num": 2,
