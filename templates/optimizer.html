@@ -107,7 +107,7 @@ function renderResults(d) {
     results.innerHTML = `
         <div class="opt-section">
             <div class="opt-section-head">
-                <h3>📝 Profile Description</h3>
+                <h3>Profile Description</h3>
                 <button class="button button-secondary button-sm" onclick="copyText(this)">Copy</button>
             </div>
             <textarea class="opt-edit" id="editDesc" rows="4">${safe(d.profile_description)}</textarea>
@@ -116,7 +116,7 @@ function renderResults(d) {
 
         <div class="opt-section">
             <div class="opt-section-head">
-                <h3>🏷 Category</h3>
+                <h3>Category</h3>
             </div>
             <input type="text" class="form-input" id="editCategory" value="${safe(d.category)}">
             <p class="opt-edit-hint">Pick the best match from ChatGPT's Business Hub categories.</p>
@@ -124,7 +124,7 @@ function renderResults(d) {
 
         <div class="opt-section">
             <div class="opt-section-head">
-                <h3>🛠 Services & Products</h3>
+                <h3>Services &amp; Products</h3>
             </div>
             <ul class="opt-list">
                 ${(d.services || []).map(s => `<li>${safe(s)}</li>`).join('')}
@@ -133,7 +133,7 @@ function renderResults(d) {
 
         <div class="opt-section">
             <div class="opt-section-head">
-                <h3>🔑 Search Keywords</h3>
+                <h3>Search Keywords</h3>
             </div>
             <div class="opt-tags">
                 ${(d.keywords || []).map(k => `<span class="opt-tag">${safe(k)}</span>`).join('')}
@@ -142,7 +142,7 @@ function renderResults(d) {
 
         <div class="opt-section">
             <div class="opt-section-head">
-                <h3>🤖 Business Agent Prompt</h3>
+                <h3>Business Agent Prompt</h3>
                 <button class="button button-secondary button-sm" onclick="copyText(this)">Copy</button>
             </div>
             <textarea class="opt-edit opt-edit-mono" id="editAgent" rows="6">${safe(d.business_agent_prompt)}</textarea>
@@ -150,7 +150,7 @@ function renderResults(d) {
 
         <div class="opt-section">
             <div class="opt-section-head">
-                <h3>💡 Profile Tips</h3>
+                <h3>Profile Tips</h3>
             </div>
             <ul class="opt-list">
                 ${(d.profile_tips || []).map(t => `<li>${safe(t)}</li>`).join('')}

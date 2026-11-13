@@ -602,7 +602,12 @@ p { max-width: 65ch; }
   padding: 10px 16px; margin: -24px -24px 16px; border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   line-height: 1.5;
 }
-.disclosure-icon { flex-shrink: 0; font-size: 14px; }
+.disclosure-icon {
+  flex-shrink: 0; font-size: 10px; font-weight: 700;
+  background: var(--color-indigo); color: #fff;
+  padding: 1px 6px; border-radius: var(--radius-sm); text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
 
 /* --- Auth divider --- */
 .auth-divider {

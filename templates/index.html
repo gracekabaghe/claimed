@@ -18,8 +18,8 @@
         <!-- Readiness Checker — THE product as hero -->
         <div class="checker" id="checker">
             <div class="checker-disclosure">
-                <span class="disclosure-icon">🇺🇸</span>
-                <span>ChatGPT Business Profiles are currently available to <strong>US-based businesses</strong> only. International rollout is coming soon. Run the scan now to check your eligibility and be ready when it launches in your region.</span>
+                <span class="disclosure-icon">US</span>
+                <span>ChatGPT Business Profiles are currently available to <strong>US-based businesses</strong> only. International rollout is coming soon.</span>
             </div>
             <form class="checker-form" id="scanForm">
                 <div class="checker-input-wrap">
@@ -60,7 +60,7 @@
         <!-- Trust bar -->
         <div class="trust-bar">
             <div class="trust-item">
-                <span class="trust-number">3</span>
+                <span class="trust-number" id="daysSinceLaunch">—</span>
                 <span class="trust-label">days since launch</span>
             </div>
             <div class="trust-divider"></div>
@@ -180,4 +180,14 @@
 
 {% block scripts %}
 <script src="/static/app.js"></script>
+<script>
+// Dynamic "days since launch" — ChatGPT Business Profiles launched Nov 10, 2026
+(function() {
+    const launch = new Date('2026-11-10');
+    const today = new Date();
+    const days = Math.floor((today - launch) / (1000 * 60 * 60 * 24));
+    const el = document.getElementById('daysSinceLaunch');
+    if (el) el.textContent = days;
+})();
+</script>
 {% endblock %}
