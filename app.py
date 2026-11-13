@@ -30,6 +30,9 @@ def get_db():
     db = sqlite3.connect(str(DB_PATH))
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA journal_mode=WAL")
+    # Ensure tables exist (Render's ephemeral filesystem)
+    db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, plan TEXT DEFAULT 'free', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")
+    db.execute("CREATE TABLE IF NOT EXISTS scans (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, business_url TEXT NOT NULL, domain TEXT, eligibility TEXT, verification_method TEXT, scan_data TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id))")
     return db
 
 
