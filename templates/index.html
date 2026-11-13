@@ -1,169 +1,106 @@
 {% extends "base.html" %}
-{% block title %}Claimed — Get Your Business Inside ChatGPT{% endblock %}
-
-{% block head %}
-<style>
-/* Editorial world overrides */
-.ed-hero {
-  background: var(--color-surface);
-  padding: var(--space-3xl) var(--space-md) var(--space-lg);
-  border-bottom: 4px double var(--color-border);
-}
-.ed-masthead {
-  max-width: 680px; margin: 0 auto var(--space-xl);
-}
-.ed-kicker {
-  font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-indigo);
-  margin-bottom: var(--space-sm);
-}
-.ed-headline {
-  font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.4rem);
-  font-weight: 700; line-height: 1.12; letter-spacing: -0.015em;
-  color: var(--color-text); margin-bottom: var(--space-sm);
-}
-.ed-headline em { font-style: normal; color: var(--color-indigo); }
-.ed-deck {
-  font-family: var(--font-body); font-size: var(--text-lg); line-height: 1.65;
-  color: var(--color-text-secondary); max-width: 580px;
-}
-.ed-deck strong { color: var(--color-text); font-weight: 600; }
-.ed-byline {
-  display: flex; align-items: center; gap: var(--space-sm);
-  font-size: var(--text-xs); color: var(--color-text-muted);
-  margin-top: var(--space-md); padding-top: var(--space-sm);
-  border-top: 1px solid var(--color-rule); max-width: 580px;
-}
-.ed-byline-date { font-weight: 600; color: var(--color-text); }
-
-.ed-tool {
-  max-width: 640px; margin: 0 auto; padding: 0 var(--space-md) var(--space-3xl);
-}
-.ed-tool-label {
-  font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-text-muted);
-  margin-bottom: var(--space-sm); text-align: center;
-}
-
-/* Section refinements */
-.story-section { padding: var(--space-2xl) var(--space-md); }
-.story-section + .story-section { border-top: 1px solid var(--color-rule); }
-
-/* Timeline darker */
-.timeline-firm .timeline-marker { background: var(--color-text); }
-
-/* FAQ as magazine Q&A */
-.faq-mag .faq-q { font-family: var(--font-display); font-size: var(--text-lg); padding: 20px 0; border-bottom: 1px solid var(--color-rule); }
-.faq-mag .faq-item { border: none; border-radius: 0; background: transparent; }
-.faq-mag .faq-a { padding: 0 0 24px; }
-.faq-mag .faq-q::after { display: none; }
-</style>
-{% endblock %}
+{% block title %}Claimed — Is Your Business on ChatGPT?{% endblock %}
 
 {% block content %}
-<!-- Editorial hero -->
-<section class="ed-hero">
-    <div class="ed-masthead">
-        <div class="ed-kicker">November 10, 2026 — San Francisco</div>
-        <h1 class="ed-headline">
-            ChatGPT now shows businesses to <em>1.2 billion people</em> every week. Most haven't claimed theirs yet.
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Launched November 10, 2026 — be among the first claimed
+        </div>
+        <h1 class="hero-heading">
+            ChatGPT now shows businesses to <span class="text-indigo">1.2 billion people</span> every week.<br>Is your business one of them?
         </h1>
-        <p class="ed-deck">
-            OpenAI launched Business Profiles three days ago — the biggest platform shift since Google introduced local listings in 2004. <strong>The businesses that claim early get the visibility. The rest wait in line.</strong>
-        </p>
-        <div class="ed-byline">
-            <span>By</span> <span>Claimed</span>
-            <span class="ed-byline-date" id="edDate"></span>
+
+        <div class="checker" id="checker">
+            <div class="checker-disclosure">
+                <span class="disclosure-icon">US</span>
+                <span>Currently available to US-based businesses. International rollout coming soon.</span>
+            </div>
+            <form class="checker-form" id="scanForm">
+                <div class="checker-input-wrap">
+                    <span class="checker-url-prefix">https://</span>
+                    <input type="text" id="urlInput" class="checker-input" placeholder="yourbusiness.com" autocomplete="url" autofocus>
+                    <button type="submit" class="button button-primary checker-submit" id="scanBtn">
+                        Scan my business
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow"><path d="M3 8H13M10 5L13 8L10 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+                <p class="checker-hint">Free. No signup. Takes 5 seconds.</p>
+            </form>
+            <div class="checker-result" id="result" style="display: none;">
+                <div class="result-header"><div class="result-verdict" id="resultVerdict"></div></div>
+                <div class="result-signals" id="resultSignals"></div>
+                <div class="result-next" id="resultNext"></div>
+            </div>
+            <div class="checker-loading" id="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Analyzing your business…</p>
+            </div>
+            <div class="checker-error" id="error" style="display: none;"></div>
         </div>
     </div>
 </section>
 
-<!-- The tool below the editorial statement -->
-<div class="ed-tool">
-    <div class="ed-tool-label">Check your business</div>
-    <div class="checker" id="checker">
-        <form class="checker-form" id="scanForm">
-            <div class="checker-input-wrap">
-                <span class="checker-url-prefix">https://</span>
-                <input type="text" id="urlInput" class="checker-input" placeholder="yourbusiness.com" autocomplete="url" autofocus>
-                <button type="submit" class="button button-primary checker-submit" id="scanBtn">
-                    Scan
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow"><path d="M3 8H13M10 5L13 8L10 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-            </div>
-        </form>
-        <div class="checker-result" id="result" style="display: none;">
-            <div class="result-header"><div class="result-verdict" id="resultVerdict"></div></div>
-            <div class="result-signals" id="resultSignals"></div>
-            <div class="result-next" id="resultNext"></div>
-        </div>
-        <div class="checker-loading" id="loading" style="display: none;">
-            <div class="loading-spinner"></div>
-            <p>Analyzing…</p>
-        </div>
-        <div class="checker-error" id="error" style="display: none;"></div>
-    </div>
-    <p class="checker-hint" style="text-align:center; margin-top:8px;">Free. No signup. Takes 5 seconds.</p>
-</div>
-
-<!-- How it works — magazine style -->
-<section class="story-section">
+<!-- How it works — timeline, not cards -->
+<section class="section">
     <div class="section-inner section-narrow">
         <div class="section-head">
-            <div class="ed-kicker" style="margin-bottom:8px;">How it works</div>
-            <h2>Three steps to getting found</h2>
+            <h2>You're three steps from being on ChatGPT</h2>
         </div>
         <div class="timeline">
             <div class="timeline-step">
                 <div class="timeline-marker">1</div>
                 <div class="timeline-body">
                     <h3>Scan your eligibility</h3>
-                    <p>Enter your URL. We detect your verification path — Shopify, domain, or phone — in seconds.</p>
+                    <p>Enter your URL above. We tell you which verification path you qualify for — Shopify, domain, or phone — in seconds.</p>
                 </div>
             </div>
             <div class="timeline-step">
                 <div class="timeline-marker">2</div>
                 <div class="timeline-body">
                     <h3>Follow the wizard</h3>
-                    <p>Step-by-step instructions for OpenAI's Business Hub. We route you to the exact page. No guesswork.</p>
+                    <p>Step-by-step instructions for OpenAI's Business Hub. We route you to the exact page and tell you what to click. No guesswork.</p>
                 </div>
             </div>
             <div class="timeline-step">
                 <div class="timeline-marker">3</div>
                 <div class="timeline-body">
                     <h3>AI writes your profile</h3>
-                    <p>Our optimizer generates your description, category, and Business Agent prompt — tuned for ChatGPT's signals.</p>
+                    <p>Our optimizer generates your description, category, services, and Business Agent prompt — tuned for ChatGPT's ranking signals.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- The window -->
+<!-- The window — asymmetric comparison -->
 <section class="section-alt">
     <div class="section-inner section-narrow">
-        <div class="ed-kicker" style="margin-bottom:8px;text-align:center;">Why now</div>
-        <div class="section-head"><h2>The same window, twenty years apart</h2></div>
+        <div class="section-head">
+            <h2>The same window, twenty years apart</h2>
+        </div>
         <div class="duo">
             <div class="duo-panel duo-past">
                 <div class="duo-label">2004</div>
                 <div class="duo-title">Google Business Profile launched</div>
-                <p class="duo-text">Early claimers dominated local search for a decade. Late movers are still paying to catch up.</p>
+                <p class="duo-text">The businesses that claimed in the first six months dominated local search for a decade. The late movers are still paying agencies to fix their listings.</p>
             </div>
             <div class="duo-panel duo-now">
                 <div class="duo-label">2026</div>
                 <div class="duo-title">ChatGPT Business Profile launched</div>
-                <p class="duo-text">The same window is open <strong>right now</strong>. Every day you wait is a day a competitor claims your spot.</p>
+                <p class="duo-text">The same window is open <strong>right now</strong>. Every day you wait is a day your competitor might claim your spot in front of 1.2 billion weekly users.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Pricing -->
-<section class="story-section">
+<!-- Pricing — two tiers, not three -->
+<section class="section">
     <div class="section-inner section-narrow">
-        <div class="ed-kicker" style="margin-bottom:8px;text-align:center;">Pricing</div>
-        <div class="section-head"><h2>Start free, upgrade when ready</h2></div>
+        <div class="section-head">
+            <h2>Start free, go Pro when you're ready</h2>
+        </div>
         <div class="pricing-duo">
             <div class="pricing-card">
                 <div class="pricing-tier">Free</div>
@@ -184,35 +121,63 @@
                     <li>Visibility tracking</li>
                     <li>Competitor intelligence</li>
                     <li>Change alerts</li>
+                    <li>Guided verification wizard</li>
                 </ul>
                 <a href="/signup" class="button button-primary button-full">Start free trial</a>
             </div>
         </div>
-        <p class="pricing-agency">Agency plans: <a href="mailto:grace@getclaimed.net">$199/mo for 50 locations</a></p>
+        <p class="pricing-agency">Managing multiple clients? <a href="mailto:grace@getclaimed.net">Agency plans available</a> — $199/mo for 50 locations.</p>
     </div>
 </section>
 
-<!-- FAQ — magazine Q&A -->
-<section class="story-section section-alt">
+<!-- FAQ -->
+<section class="section section-alt">
     <div class="section-inner section-narrow">
-        <div class="ed-kicker" style="margin-bottom:8px;text-align:center;">Q&amp;A</div>
-        <div class="section-head"><h2>Questions you probably have</h2></div>
-        <div class="faq faq-mag">
+        <div class="section-head">
+            <h2>Questions you probably have</h2>
+        </div>
+        <div class="faq">
             <details class="faq-item" open>
                 <summary class="faq-q">What even is a ChatGPT Business Profile?</summary>
-                <div class="faq-a"><p>On November 10, 2026, OpenAI launched "Businesses in ChatGPT." Companies can claim a verified profile inside ChatGPT — the AI used by 1.2 billion people every week. When someone asks "best dentist near me," ChatGPT shows claimed businesses with descriptions, categories, and links. If yours isn't claimed, ChatGPT shows nothing — or outdated web scrapings.</p></div>
+                <div class="faq-a">
+                    <p>On November 10, 2026, OpenAI launched "Businesses in ChatGPT" — a way for companies to claim a verified profile inside ChatGPT, the AI used by 1.2 billion people every week. When someone asks ChatGPT "who's the best dentist near me?" or "compare these two project management tools," ChatGPT now shows business profiles with descriptions, categories, services, and links. If your business isn't claimed, ChatGPT either shows nothing about you — or worse, shows outdated or incorrect information scraped from the web.</p>
+                </div>
             </details>
             <details class="faq-item">
                 <summary class="faq-q">How is this different from Google Business Profile?</summary>
-                <div class="faq-a"><p>Google Business Profile launched in 2004. It's now mature and crowded. ChatGPT Business Profile is <strong>three days old</strong>. Early claimers get the same advantage GBP early claimers got: visibility before competition arrives, better positioning as the algorithm learns, and first access to Business Agents (AI customer service in ChatGPT).</p></div>
+                <div class="faq-a">
+                    <p>Google Business Profile (formerly Google My Business) launched in 2004 and became the primary way local businesses appeared in Google Search and Maps. It's now a mature, crowded platform — most businesses already have one, and standing out is expensive. ChatGPT Business Profile is the same concept, but it's <strong>three days old</strong>. The businesses that claim early get the same first-mover advantage that GBP early claimers got in 2004: visibility before the competition arrives, better positioning as the algorithm learns, and a head start on Business Agents (AI-powered customer service inside ChatGPT) before they become mainstream.</p>
+                </div>
             </details>
             <details class="faq-item">
-                <summary class="faq-q">What's in the Pro plan?</summary>
-                <div class="faq-a"><p>AI Profile Optimizer generates your description, category, services, keywords, and Business Agent prompt. Visibility tracking shows when ChatGPT mentions you. Competitor intelligence flags who's claimed in your market. Change alerts notify you when profiles shift. $29/month.</p></div>
+                <summary class="faq-q">Why should I care about appearing in ChatGPT specifically?</summary>
+                <div class="faq-a">
+                    <p>Because 1.2 billion people use ChatGPT weekly — and a growing share of them use it instead of Google for product research, comparisons, and local recommendations. ChatGPT doesn't show ads (yet). It shows <em>answers</em>. When your business is the answer to "what's the best [your category] in [your city]," you win the customer without competing for ad space. Early data from OpenAI shows that verified business profiles with complete information and Business Agents appear in significantly more model responses.</p>
+                </div>
             </details>
             <details class="faq-item">
-                <summary class="faq-q">Can I do this without Claimed?</summary>
-                <div class="faq-a"><p>Yes. OpenAI's Business Hub is free. But verification involves multiple steps (Shopify Connect, domain verification, Persona ID), optimization decisions that affect visibility, and ongoing monitoring. Claimed saves you the time. The scanner is free forever.</p></div>
+                <summary class="faq-q">What does the Pro plan include?</summary>
+                <div class="faq-a">
+                    <p>The $29/month Pro plan unlocks the full Claimed toolkit:</p>
+                    <ul>
+                        <li><strong>AI Profile Optimizer</strong> — generates your ChatGPT Business Profile description, category, services, keywords, and Business Agent prompt using AI tuned for ChatGPT's ranking signals. Editable before you copy.</li>
+                        <li><strong>Visibility tracking</strong> — see when and how ChatGPT mentions your business, including website click-throughs.</li>
+                        <li><strong>Competitor intelligence</strong> — find out which of your competitors have claimed their ChatGPT profiles and how they compare to yours.</li>
+                        <li><strong>Change alerts</strong> — get notified when ChatGPT's algorithm shifts or when competitor profiles change.</li>
+                    </ul>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-q">Is this available outside the US?</summary>
+                <div class="faq-a">
+                    <p>Currently, ChatGPT Business Profiles are only available to US-based businesses. OpenAI has confirmed international expansion is coming, but hasn't announced specific dates. You can run the free readiness scan now — it'll tell you your eligibility path so you're ready the moment it launches in your country.</p>
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-q">Can I claim my business without Claimed?</summary>
+                <div class="faq-a">
+                    <p>Yes — OpenAI's Business Hub is free to use directly. But the claiming process involves multiple verification steps (Shopify Connect, domain verification, Persona identity check), profile optimization decisions that impact your visibility, and ongoing monitoring that most business owners don't have time for. Claimed is the guided path that saves you time and optimizes your profile for maximum visibility. The readiness scanner is free forever.</p>
+                </div>
             </details>
         </div>
     </div>
@@ -224,8 +189,10 @@
 <script>
 (function() {
     const launch = new Date('2026-11-10');
-    const days = Math.floor((new Date() - launch) / (1000*60*60*24));
-    document.getElementById('edDate').textContent = 'Day ' + days;
+    const today = new Date();
+    const days = Math.floor((today - launch) / (1000 * 60 * 60 * 24));
+    const el = document.getElementById('daysSinceLaunch');
+    if (el) el.textContent = days;
 })();
 </script>
 {% endblock %}
