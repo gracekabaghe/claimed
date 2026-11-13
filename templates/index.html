@@ -9,44 +9,27 @@
             Launched November 10, 2026 — be among the first claimed
         </div>
         <h1 class="hero-heading">
-            ChatGPT now shows businesses to <span class="text-indigo">1.2 billion people</span> every week.
+            ChatGPT now shows businesses to <span class="text-indigo">1.2 billion people</span> every week.<br>Is your business one of them?
         </h1>
-        <p class="hero-sub">
-            Is your business one of them? Run a free readiness scan and get a step-by-step plan to claim, optimize, and monitor your ChatGPT presence.
-        </p>
 
-        <!-- Readiness Checker — THE product as hero -->
         <div class="checker" id="checker">
             <div class="checker-disclosure">
                 <span class="disclosure-icon">US</span>
-                <span>ChatGPT Business Profiles are currently available to <strong>US-based businesses</strong> only. International rollout is coming soon.</span>
+                <span>Currently available to US-based businesses. International rollout coming soon.</span>
             </div>
             <form class="checker-form" id="scanForm">
                 <div class="checker-input-wrap">
                     <span class="checker-url-prefix">https://</span>
-                    <input
-                        type="text"
-                        id="urlInput"
-                        class="checker-input"
-                        placeholder="yourbusiness.com"
-                        autocomplete="url"
-                        autofocus
-                    >
+                    <input type="text" id="urlInput" class="checker-input" placeholder="yourbusiness.com" autocomplete="url" autofocus>
                     <button type="submit" class="button button-primary checker-submit" id="scanBtn">
                         Scan my business
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow">
-                            <path d="M3 8H13M10 5L13 8L10 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow"><path d="M3 8H13M10 5L13 8L10 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                 </div>
-                <p class="checker-hint">Free — no signup required. Takes 5 seconds.</p>
+                <p class="checker-hint">Free. No signup. Takes 5 seconds.</p>
             </form>
-
-            <!-- Results panel (hidden until scan) -->
             <div class="checker-result" id="result" style="display: none;">
-                <div class="result-header">
-                    <div class="result-verdict" id="resultVerdict"></div>
-                </div>
+                <div class="result-header"><div class="result-verdict" id="resultVerdict"></div></div>
                 <div class="result-signals" id="resultSignals"></div>
                 <div class="result-next" id="resultNext"></div>
             </div>
@@ -56,124 +39,94 @@
             </div>
             <div class="checker-error" id="error" style="display: none;"></div>
         </div>
+    </div>
+</section>
 
-        <!-- Trust bar -->
-        <div class="trust-bar">
-            <div class="trust-item">
-                <span class="trust-number" id="daysSinceLaunch">—</span>
-                <span class="trust-label">days since launch</span>
+<!-- How it works — timeline, not cards -->
+<section class="section">
+    <div class="section-inner section-narrow">
+        <div class="section-head">
+            <h2>You're three steps from being on ChatGPT</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-step">
+                <div class="timeline-marker">1</div>
+                <div class="timeline-body">
+                    <h3>Scan your eligibility</h3>
+                    <p>Enter your URL above. We tell you which verification path you qualify for — Shopify, domain, or phone — in seconds.</p>
+                </div>
             </div>
-            <div class="trust-divider"></div>
-            <div class="trust-item">
-                <span class="trust-number">0</span>
-                <span class="trust-label">established competitors</span>
+            <div class="timeline-step">
+                <div class="timeline-marker">2</div>
+                <div class="timeline-body">
+                    <h3>Follow the wizard</h3>
+                    <p>Step-by-step instructions for OpenAI's Business Hub. We route you to the exact page and tell you what to click. No guesswork.</p>
+                </div>
             </div>
-            <div class="trust-divider"></div>
-            <div class="trust-item">
-                <span class="trust-number">1.2B</span>
-                <span class="trust-label">weekly ChatGPT users</span>
+            <div class="timeline-step">
+                <div class="timeline-marker">3</div>
+                <div class="timeline-body">
+                    <h3>AI writes your profile</h3>
+                    <p>Our optimizer generates your description, category, services, and Business Agent prompt — tuned for ChatGPT's ranking signals.</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- How It Works -->
-<section class="section" id="how-it-works">
-    <div class="section-inner">
+<!-- The window — asymmetric comparison -->
+<section class="section-alt">
+    <div class="section-inner section-narrow">
         <div class="section-head">
-            <h2>Claim your business in three steps</h2>
-            <p class="section-sub">No technical knowledge required. We guide you through every step.</p>
+            <h2>The same window, twenty years apart</h2>
         </div>
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-num">1</div>
-                <h3 class="step-title">Scan your eligibility</h3>
-                <p class="step-desc">Enter your business URL. We analyze your domain, platform, and verification path in seconds.</p>
+        <div class="duo">
+            <div class="duo-panel duo-past">
+                <div class="duo-label">2004</div>
+                <div class="duo-title">Google Business Profile launched</div>
+                <p class="duo-text">The businesses that claimed in the first six months dominated local search for a decade. The late movers are still paying agencies to fix their listings.</p>
             </div>
-            <div class="step-card">
-                <div class="step-num">2</div>
-                <h3 class="step-title">Follow the guided wizard</h3>
-                <p class="step-desc">We route you to the right verification method — Shopify Connect, domain email, or phone — with exact instructions.</p>
-            </div>
-            <div class="step-card">
-                <div class="step-num">3</div>
-                <h3 class="step-title">Optimize and monitor</h3>
-                <p class="step-desc">AI writes your profile. We track your ChatGPT mentions, clicks, and visibility — so you know it's working.</p>
+            <div class="duo-panel duo-now">
+                <div class="duo-label">2026</div>
+                <div class="duo-title">ChatGPT Business Profile launched</div>
+                <p class="duo-text">The same window is open <strong>right now</strong>. Every day you wait is a day your competitor might claim your spot in front of 1.2 billion weekly users.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Why Now -->
-<section class="section section-alt" id="why-now">
-    <div class="section-inner">
+<!-- Pricing — two tiers, not three -->
+<section class="section">
+    <div class="section-inner section-narrow">
         <div class="section-head">
-            <h2>The window won't stay open</h2>
-            <p class="section-sub">When Google Business Profiles launched in 2004, the businesses that claimed early dominated local search for a decade. ChatGPT just launched the same thing.</p>
+            <h2>Start free, go Pro when you're ready</h2>
         </div>
-        <div class="compare-grid">
-            <div class="compare-card">
-                <div class="compare-label">Google Business Profile</div>
-                <div class="compare-stat">20 years old</div>
-                <div class="compare-detail">The late movers are still paying agencies to fix their listings. Early claimers built their reputations for free.</div>
-            </div>
-            <div class="compare-card compare-card-highlight">
-                <div class="compare-label">ChatGPT Business Profile</div>
-                <div class="compare-stat">3 days old</div>
-                <div class="compare-detail">You are looking at the exact same window — right now. Every day you wait is a day your competitor might claim your spot.</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Pricing -->
-<section class="section" id="pricing">
-    <div class="section-inner">
-        <div class="section-head">
-            <h2>Simple pricing</h2>
-            <p class="section-sub">Start free. Upgrade when you're ready to optimize and monitor.</p>
-        </div>
-        <div class="pricing-grid">
+        <div class="pricing-duo">
             <div class="pricing-card">
                 <div class="pricing-tier">Free</div>
                 <div class="pricing-price">$0</div>
-                <div class="pricing-period">forever</div>
                 <ul class="pricing-features">
                     <li>Readiness scanner</li>
-                    <li>Basic claim guide</li>
+                    <li>Claim guide</li>
                     <li>Eligibility report</li>
                 </ul>
-                <a href="#checker" class="button button-secondary button-full">Scan your business</a>
+                <a href="#checker" class="button button-secondary button-full">Scan now</a>
             </div>
             <div class="pricing-card pricing-card-featured">
-                <div class="pricing-badge">Most popular</div>
-                <div class="pricing-tier">Pro</div>
-                <div class="pricing-price">$29</div>
-                <div class="pricing-period">/month</div>
+                <div class="pricing-badge">Pro</div>
+                <div class="pricing-tier">Everything you need</div>
+                <div class="pricing-price">$29<span class="pricing-period">/mo</span></div>
                 <ul class="pricing-features">
-                    <li>Everything in Free</li>
                     <li>AI profile optimizer</li>
-                    <li>Insights dashboard</li>
                     <li>Visibility tracking</li>
                     <li>Competitor intelligence</li>
                     <li>Change alerts</li>
+                    <li>Guided verification wizard</li>
                 </ul>
-                <a href="/dashboard" class="button button-primary button-full">Start free trial</a>
-            </div>
-            <div class="pricing-card">
-                <div class="pricing-tier">Agency</div>
-                <div class="pricing-price">$199</div>
-                <div class="pricing-period">/month</div>
-                <ul class="pricing-features">
-                    <li>Everything in Pro</li>
-                    <li>50 locations</li>
-                    <li>White-label reports</li>
-                    <li>API access</li>
-                    <li>Priority support</li>
-                </ul>
-                <a href="mailto:grace@getclaimed.net?subject=Agency%20plan%20inquiry" class="button button-secondary button-full">Contact us</a>
+                <a href="/signup" class="button button-primary button-full">Start free trial</a>
             </div>
         </div>
+        <p class="pricing-agency">Managing multiple clients? <a href="mailto:grace@getclaimed.net">Agency plans available</a> — $199/mo for 50 locations.</p>
     </div>
 </section>
 {% endblock %}
@@ -181,7 +134,6 @@
 {% block scripts %}
 <script src="/static/app.js"></script>
 <script>
-// Dynamic "days since launch" — ChatGPT Business Profiles launched Nov 10, 2026
 (function() {
     const launch = new Date('2026-11-10');
     const today = new Date();
