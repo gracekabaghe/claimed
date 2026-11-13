@@ -22,6 +22,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-key-replace-in-production")
+app.config["PROPAGATE_EXCEPTIONS"] = True
 
 DB_PATH = Path(__file__).parent / "claimed.db"
 
@@ -272,6 +273,18 @@ def analyze_business(url: str) -> dict:
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/health")
+def health():
+    """Debug: test DB connectivity."""
+    try:
+        db = get_db()
+        db.execute("SELECT 1 FROM users LIMIT 1")
+        db.close()
+        return jsonify({"status": "ok", "db": "connected", "python": os.sys.version})
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e), "type": type(e).__name__}), 500
 
 
 @app.route("/wizard")
