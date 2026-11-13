@@ -384,6 +384,17 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/upgrade-me")
+@login_required
+def upgrade_me():
+    """One-click Pro upgrade for testing (remove in production)."""
+    db = get_db()
+    db.execute("UPDATE users SET plan = 'pro_monthly' WHERE id = ?", (session["user_id"],))
+    db.commit()
+    db.close()
+    return redirect(url_for("optimizer"))
+
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
