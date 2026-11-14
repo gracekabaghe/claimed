@@ -207,7 +207,7 @@ p { max-width: 65ch; }
 .checker-url-prefix {
   font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 500;
   color: var(--color-text-muted); padding: 14px 0 14px 16px;
-  user-select: none; white-space: nowrap;
+  user-select: none; white-space: nowrap; cursor: text;
 }
 .checker-input {
   flex: 1; border: none; outline: none;
