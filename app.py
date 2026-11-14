@@ -340,7 +340,7 @@ def health():
         db = get_db()
         db.execute("SELECT 1 FROM users LIMIT 1")
         db.close()
-        return jsonify({"status": "ok", "db": "connected", "python": os.sys.version})
+        return jsonify({"status": "ok", "db": "connected", "backend": "postgres" if USING_POSTGRES else "sqlite", "python": os.sys.version})
     except Exception as e:
         return jsonify({"status": "error", "error": str(e), "type": type(e).__name__}), 500
 
