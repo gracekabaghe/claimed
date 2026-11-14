@@ -345,6 +345,17 @@ def health():
         return jsonify({"status": "error", "error": str(e), "type": type(e).__name__}), 500
 
 
+@app.route("/_cleanup_test_accounts")
+def _cleanup_test_accounts():
+    """TEMP: remove QA test accounts. Remove this route after use."""
+    db = get_db()
+    for email in ("persist-check@example.com", "pp-test-74986@example.com"):
+        db.execute("DELETE FROM users WHERE email = ?", (email,))
+    db.commit()
+    db.close()
+    return jsonify({"cleaned": True})
+
+
 @app.route("/wizard")
 def wizard():
     method = request.args.get("method", "domain")
