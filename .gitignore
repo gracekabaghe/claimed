@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 # Hermes project-local tooling
 .hermes/
+# Impeccable local consent (machine-specific)
+.impeccable/config.local.json
