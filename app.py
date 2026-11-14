@@ -26,43 +26,95 @@ app.config["PROPAGATE_EXCEPTIONS"] = True
 
 DB_PATH = Path(__file__).parent / "claimed.db"
 
+# --- Database layer ---
+# Postgres on Render (when DATABASE_URL is set); SQLite locally for dev.
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+USING_POSTGRES = bool(DATABASE_URL)
+if USING_POSTGRES:
+    import psycopg2
+    from psycopg2.extras import RealDictCursor
+    IntegrityError = psycopg2.IntegrityError
+else:
+    IntegrityError = sqlite3.IntegrityError
 
-def get_db():
-    db = sqlite3.connect(str(DB_PATH))
-    db.row_factory = sqlite3.Row
-    db.execute("PRAGMA journal_mode=WAL")
-    # Ensure tables exist (Render's ephemeral filesystem)
-    db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, plan TEXT DEFAULT 'free', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")
-    db.execute("CREATE TABLE IF NOT EXISTS scans (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, business_url TEXT NOT NULL, domain TEXT, eligibility TEXT, verification_method TEXT, scan_data TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id))")
-    return db
+
+def _pg_dsn(url: str) -> str:
+    """psycopg2 needs postgresql://; Render hands us postgres://."""
+    if url.startswith("postgres://"):
+        return "postgresql://" + url[len("postgres://"):]
+    return url
+
+
+_USERS_SQLITE = (
+    "CREATE TABLE IF NOT EXISTS users ("
+    "id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, "
+    "password_hash TEXT NOT NULL, plan TEXT DEFAULT 'free', "
+    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+)
+_SCANS_SQLITE = (
+    "CREATE TABLE IF NOT EXISTS scans ("
+    "id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, "
+    "business_url TEXT NOT NULL, domain TEXT, eligibility TEXT, "
+    "verification_method TEXT, scan_data TEXT, "
+    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+)
+_USERS_PG = (
+    "CREATE TABLE IF NOT EXISTS users ("
+    "id SERIAL PRIMARY KEY, email TEXT UNIQUE NOT NULL, "
+    "password_hash TEXT NOT NULL, plan TEXT DEFAULT 'free', "
+    "created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP)"
+)
+_SCANS_PG = (
+    "CREATE TABLE IF NOT EXISTS scans ("
+    "id SERIAL PRIMARY KEY, user_id INTEGER, "
+    "business_url TEXT NOT NULL, domain TEXT, eligibility TEXT, "
+    "verification_method TEXT, scan_data TEXT, "
+    "created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP)"
+)
+
+
+class Db:
+    """Minimal facade over SQLite (local) and Postgres (Render)."""
+
+    def __init__(self):
+        if USING_POSTGRES:
+            self._pg = True
+            self.conn = psycopg2.connect(_pg_dsn(DATABASE_URL))
+            cur = self.conn.cursor()
+            cur.execute(_USERS_PG)
+            cur.execute(_SCANS_PG)
+            self.conn.commit()
+            cur.close()
+        else:
+            self._pg = False
+            self.conn = sqlite3.connect(str(DB_PATH))
+            self.conn.row_factory = sqlite3.Row
+            self.conn.execute("PRAGMA journal_mode=WAL")
+            self.conn.execute(_USERS_SQLITE)
+            self.conn.execute(_SCANS_SQLITE)
+            self.conn.commit()
+
+    def execute(self, sql, params=()):
+        if self._pg:
+            cur = self.conn.cursor(cursor_factory=RealDictCursor)
+            cur.execute(sql.replace("?", "%s"), params)
+            return cur
+        return self.conn.execute(sql, params)
+
+    def commit(self):
+        self.conn.commit()
+
+    def close(self):
+        self.conn.close()
+
+
+def get_db() -> Db:
+    return Db()
 
 
 def init_db():
-    db = get_db()
-    db.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            plan TEXT DEFAULT 'free',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    db.execute("""
-        CREATE TABLE IF NOT EXISTS scans (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            business_url TEXT NOT NULL,
-            domain TEXT,
-            eligibility TEXT,
-            verification_method TEXT,
-            scan_data TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
-    """)
-    db.commit()
-    db.close()
+    """Create tables at startup (idempotent)."""
+    get_db().close()
 
 
 # Verification wizard steps per path
@@ -360,7 +412,7 @@ def signup():
             session["email"] = email
             db.close()
             return redirect(url_for("dashboard"))
-        except sqlite3.IntegrityError:
+        except IntegrityError:
             db.close()
             return render_template("signup.html", error="An account with this email already exists.")
 
