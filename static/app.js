@@ -17,6 +17,7 @@ const resultEl = document.getElementById('result');
 const loadingEl = document.getElementById('loading');
 const errorEl = document.getElementById('error');
 const scanBtn = document.getElementById('scanBtn');
+const originalBtnHTML = scanBtn.innerHTML;
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -50,7 +51,7 @@ form.addEventListener('submit', async (e) => {
   } finally {
     loadingEl.style.display = 'none';
     scanBtn.disabled = false;
-    scanBtn.innerHTML = 'Scan my business <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow"><path d="M3 8H13M10 5L13 8L10 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    scanBtn.innerHTML = originalBtnHTML;
   }
 });
 
