@@ -2,48 +2,39 @@
 {% block title %}Claimed — Is Your Business on ChatGPT?{% endblock %}
 
 {% block content %}
-<!-- Hero -->
-<section class="hero-split">
-    <div class="hero-split-inner">
-        <div class="hero-split-text">
-            <div class="hero-badge">
-                <span>Launched November 10, 2026</span>
+<!-- Hero: the scanner is the product -->
+<section class="hero">
+    <div class="hero-inner">
+        <h1 class="hero-heading">
+            ChatGPT now shows businesses to <span class="text-indigo">1.2 billion people</span> every week.
+        </h1>
+        <p class="hero-sub">
+            Claim yours before a competitor does. Check your eligibility in five seconds.
+        </p>
+
+        <div class="checker" id="checker">
+            <form class="checker-form" id="scanForm">
+                <div class="checker-input-wrap">
+                    <label class="checker-url-prefix" for="urlInput">https://</label>
+                    <input type="text" id="urlInput" class="checker-input" placeholder="yourbusiness.com" autocomplete="url" autofocus>
+                    <button type="submit" class="button button-primary checker-submit" id="scanBtn">
+                        Scan my business
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="button-arrow"><path d="M3 8H13M10 5L13 8L10 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            </form>
+            <div class="checker-result" id="result" style="display: none;">
+                <div class="result-header"><div class="result-verdict" id="resultVerdict"></div></div>
+                <div class="result-signals" id="resultSignals"></div>
+                <div class="result-next" id="resultNext"></div>
             </div>
-            <h1 class="hero-heading">
-                ChatGPT now shows businesses to <span class="text-indigo">1.2 billion people</span> every week.
-            </h1>
-            <p class="hero-sub">
-                Is your business one of them? Run a free readiness scan and get a step-by-step plan to claim, optimize, and monitor your ChatGPT presence.
-            </p>
-        </div>
-        <div class="hero-split-tool">
-            <div class="checker" id="checker">
-                <div class="checker-disclosure">
-                    <span class="disclosure-icon">US</span>
-                    <span>Currently available to US-based businesses. International rollout coming soon.</span>
-                </div>
-                <form class="checker-form" id="scanForm">
-                    <div class="checker-input-wrap">
-                        <label class="checker-url-prefix" for="urlInput">https://</label>
-                        <input type="text" id="urlInput" class="checker-input" placeholder="yourbusiness.com" autocomplete="url" autofocus>
-                        <button type="submit" class="button button-primary checker-submit" id="scanBtn">
-                            Scan
-                        </button>
-                    </div>
-                </form>
-                <div class="checker-result" id="result" style="display: none;">
-                    <div class="result-header"><div class="result-verdict" id="resultVerdict"></div></div>
-                    <div class="result-signals" id="resultSignals"></div>
-                    <div class="result-next" id="resultNext"></div>
-                </div>
-                <div class="checker-loading" id="loading" style="display: none;">
-                    <div class="loading-spinner"></div>
-                    <p>Analyzing…</p>
-                </div>
-                <div class="checker-error" id="error" style="display: none;"></div>
+            <div class="checker-loading" id="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Analyzing your business…</p>
             </div>
-            <p class="checker-hint" style="text-align: center; margin-top: 8px;">Free. No signup. Takes 5&nbsp;seconds.</p>
+            <div class="checker-error" id="error" style="display: none;"></div>
         </div>
+        <p class="checker-hint">Free. No signup. Takes five seconds. US businesses only for now.</p>
     </div>
 </section>
 
@@ -51,7 +42,7 @@
 <section class="section" id="how-it-works">
     <div class="section-inner section-narrow">
         <div class="section-head">
-            <h2>You're three steps from being on ChatGPT</h2>
+            <h2>Three steps</h2>
         </div>
         <div class="timeline">
             <div class="timeline-step">
