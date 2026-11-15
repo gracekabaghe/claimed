@@ -18,22 +18,28 @@
                 <span class="brand-mark">C</span>
                 <span class="brand-text">Claimed</span>
             </a>
-            <div class="nav-links">
-                <a href="/dashboard" class="nav-link">Dashboard</a>
-                <a href="/#how-it-works" class="nav-link">How it works</a>
-                <a href="/#pricing" class="nav-link">Pricing</a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-collapse">
+                <svg class="nav-icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+                <svg class="nav-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+            <div class="nav-collapse" id="nav-collapse">
+                <div class="nav-links">
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/#how-it-works" class="nav-link">How it works</a>
+                    <a href="/#pricing" class="nav-link">Pricing</a>
+                </div>
+                {% if session.get("user_id") %}
+                <div class="nav-user">
+                    <a href="/dashboard" class="nav-link">{{ session.get("email", "Account") }}</a>
+                    <a href="/logout" class="button button-secondary button-sm">Sign out</a>
+                </div>
+                {% else %}
+                <div class="nav-auth">
+                    <a href="/login" class="nav-link">Sign in</a>
+                    <a href="/signup" class="button button-primary button-sm">Sign up</a>
+                </div>
+                {% endif %}
             </div>
-            {% if session.get("user_id") %}
-            <div class="nav-user">
-                <a href="/dashboard" class="nav-link">{{ session.get("email", "Account") }}</a>
-                <a href="/logout" class="button button-secondary button-sm">Sign out</a>
-            </div>
-            {% else %}
-            <div class="nav-auth">
-                <a href="/login" class="nav-link">Sign in</a>
-                <a href="/signup" class="button button-primary button-sm">Sign up</a>
-            </div>
-            {% endif %}
         </div>
     </nav>
     <main>{% block content %}{% endblock %}</main>
@@ -42,6 +48,24 @@
             <p class="footer-text">&copy; 2026 Claimed &middot; <a href="https://x.com/agenticgrace" class="footer-link">@agenticgrace</a> &middot; <a href="https://getclaimed.net" class="footer-link">getclaimed.net</a> &middot; <span class="footer-paypal">PayPal <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align: -2px;"><path d="M7.5 4.5h5.3c2.3 0 4 1.3 4 3.5s-1.7 3.5-4 3.5H9.5l-2 8H4.5l3-15z" fill="#003087"/><path d="M17.5 4.5c-2.5 0-4.5 1.8-4.5 4.2 0 2.2 1.5 3.8 3.8 3.8h2.2l-0.8 4H21.5l1-5.5c0-3.5-2.5-6.5-5-6.5z" fill="#009CDE"/><path d="M12.5 12.5h-2l-1.5 6.5h2.5l1-6.5z" fill="#003087"/><path d="M17.5 10.5c1.5 0 2.8-0.7 3.5-1.8l-1.5 8.3h-2.5l1-6.5h-0.5z" fill="#009CDE"/></svg></span></p>
         </div>
     </footer>
+    <script>
+    (function () {
+        var btn = document.getElementById('nav-toggle');
+        var menu = document.getElementById('nav-collapse');
+        if (btn && menu) {
+            btn.addEventListener('click', function () {
+                var open = menu.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            menu.addEventListener('click', function (e) {
+                if (e.target.closest('a')) {
+                    menu.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    })();
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
